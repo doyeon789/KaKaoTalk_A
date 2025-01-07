@@ -1,5 +1,7 @@
 package Icon;
 
+import Home.Home_Page;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -7,9 +9,12 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
-public class Main {
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Baskin Robbins");
+public class K_Icon {
+
+    private static boolean isHome_PageOpen = false; // private으로 변경
+
+    public K_Icon() {
+        JFrame frame = new JFrame("");
 
         // 사이즈 설정
         frame.setSize(72, 140);
@@ -33,7 +38,11 @@ public class Main {
 
         Icon_image.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                System.out.println("시작하기");
+                boolean temp_isHome_PageOpne = isHome_PageOpen();
+                if(!temp_isHome_PageOpne){
+                    isHome_PageOpen = true;
+                    Home_Page.Home();
+                }
             }
         });
 
@@ -41,9 +50,9 @@ public class Main {
         madeby.setBounds(10,63,64,30);
         madeby.setForeground(Color.WHITE);
         try {
-            Font BMJUA = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Pretendard-Bold.otf"));
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(BMJUA);
-            madeby.setFont(BMJUA.deriveFont(12f));
+            Font Pretendard = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Pretendard-Bold.otf"));
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(Pretendard);
+            madeby.setFont(Pretendard.deriveFont(12f));
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
@@ -51,9 +60,9 @@ public class Main {
         Doyeon.setBounds(14,80,64,30);
         Doyeon.setForeground(Color.WHITE);
         try {
-            Font BMJUA = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Pretendard-Bold.otf"));
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(BMJUA);
-            Doyeon.setFont(BMJUA.deriveFont(12f));
+            Font Pretendard = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/Pretendard-Bold.otf"));
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(Pretendard);
+            Doyeon.setFont(Pretendard.deriveFont(12f));
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
@@ -63,5 +72,14 @@ public class Main {
         Icon_panel.add(Icon_image);
         frame.add(Icon_panel);
         frame.setVisible(true);
+    }
+    // Getter 메서드
+    public static boolean isHome_PageOpen() {
+        return isHome_PageOpen;
+    }
+
+    // Setter 메서드
+    public static void setHome_PageOpen(boolean home_PageOpen) {
+        isHome_PageOpen = home_PageOpen;
     }
 }
