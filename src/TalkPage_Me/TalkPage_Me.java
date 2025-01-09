@@ -8,7 +8,9 @@ import java.awt.event.*;
 
 public class TalkPage_Me {
     static JTextArea InputArea;
+    static JPanel Talk_panel_me;
     static JLabel sending;
+
     public static void TalkPage(){
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -23,7 +25,7 @@ public class TalkPage_Me {
         frame_Talk_me.setBackground(new Color(0,0,0,0));
         frame_Talk_me.setResizable(false);
 
-        JPanel Talk_panel_me = new JPanel();
+        Talk_panel_me = new JPanel();
         Talk_panel_me.setLayout(null);
         Talk_panel_me.setOpaque(false);
         Talk_panel_me.setBounds(0, 0, 379, 639);
@@ -36,6 +38,7 @@ public class TalkPage_Me {
         Image sending_logo = sending_img.getScaledInstance(61, 31, Image.SCALE_SMOOTH);
         sending.setIcon(new ImageIcon(sending_logo));
         sending.setVisible(false);
+
 
 
         InputArea = new JTextArea("메시지 입력");
@@ -214,7 +217,8 @@ public class TalkPage_Me {
             return;
         }
 
-        System.out.println("send = \"" + InputArea.getText() + "\"");
+        Chat_Talkmyself.Chat(InputArea.getText(),Talk_panel_me);
+
         InputArea.setText(null);
     }
 
