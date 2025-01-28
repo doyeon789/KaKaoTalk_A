@@ -5,11 +5,18 @@ import Home.Home_Page;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+import static TalkPage_Me.Chat_Talkmyself.chat_cnt;
 
 public class TalkPage_Me {
-    static JTextArea InputArea;
-    static JPanel Talk_panel_me;
-    static JLabel sending;
+    static JTextArea InputArea = new JTextArea("메시지 입력");
+    static JPanel Talk_panel_me = new JPanel();
+    static JLabel sending = new JLabel();
+    static JLabel X_button = new JLabel();
+    static JLabel Move = new JLabel();
+
 
     public static void TalkPage(){
         try {
@@ -25,12 +32,10 @@ public class TalkPage_Me {
         frame_Talk_me.setBackground(new Color(0,0,0,0));
         frame_Talk_me.setResizable(false);
 
-        Talk_panel_me = new JPanel();
         Talk_panel_me.setLayout(null);
         Talk_panel_me.setOpaque(false);
         Talk_panel_me.setBounds(0, 0, 379, 639);
 
-        sending = new JLabel();
         sending.setOpaque(false);
         sending.setBounds(313, 602, 61, 31);
         ImageIcon sendingI = new ImageIcon("image/TalkPage/send.png");
@@ -39,12 +44,10 @@ public class TalkPage_Me {
         sending.setIcon(new ImageIcon(sending_logo));
         sending.setVisible(false);
 
-
-
-        InputArea = new JTextArea("메시지 입력");
         InputArea.setForeground(new Color(139,139,139));
-        InputArea.setOpaque(true);
-        InputArea.setBackground(Color.white);
+        InputArea.setOpaque(false);
+
+       // InputArea.setBackground(Color.white);
         InputArea.setBounds(0,0,370,72);
         InputArea.setLineWrap(true);
         InputArea.setWrapStyleWord(true);
@@ -54,6 +57,7 @@ public class TalkPage_Me {
             @Override
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
+
                 if (InputArea.getForeground().equals(new Color(139,139,139))) {
                     InputArea.setText("");
                     InputArea.setForeground(Color.BLACK);
@@ -99,6 +103,7 @@ public class TalkPage_Me {
         sending.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e){
                 if(sending.isVisible()) {
+                    Talk_panel_me.repaint();
                     send();
                     sending.setVisible(false);
                 }
@@ -138,7 +143,6 @@ public class TalkPage_Me {
 
         final Point[] mouseClickPoint = {null};
 
-        JLabel Move = new JLabel();
         Move.setOpaque(false);
         Move.setBounds(65,0,332,40);
         Move.addMouseListener(new MouseAdapter() {
@@ -160,7 +164,6 @@ public class TalkPage_Me {
             }
         });
 
-        JLabel X_button = new JLabel();
         X_button.setOpaque(false);
         X_button.setBounds(5, 3, 56, 21);
         ImageIcon X_buttonI = new ImageIcon("image/COM/X.png");
@@ -212,13 +215,33 @@ public class TalkPage_Me {
         frame_Talk_me.setVisible(true);
     }
 
+//    private static void send() {
+//        if (InputArea.getText().isEmpty()) {
+//            return;
+//        }
+//
+//        Chat_Talkmyself.Chat(InputArea.getText(),Talk_panel_me);
+//
+//        InputArea.setText(null);
+//    }
+
     private static void send() {
         if (InputArea.getText().isEmpty()) {
             return;
         }
 
-        Chat_Talkmyself.Chat(InputArea.getText(),Talk_panel_me);
+        String messageText = InputArea.getText();
 
+        LocalTime currentTime = LocalTime.now(); // 현재 시간
+        String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+        // 이전 메시지와 시간이 동일하면 시간 정보 삭제
+        if (chat_cnt > 0 && isTimeEqual(formattedTime)) {
+            // 시간이 같으면 중복된 시간은 출력하지 않음
+            formattedTime = "";
+        }
+
+        Chat_Talkmyself.Chat(messageText, Talk_panel_me, formattedTime);
         InputArea.setText(null);
     }
 
@@ -229,5 +252,23 @@ public class TalkPage_Me {
         } else {
             sending.setVisible(true);
         }
+    }
+    private static boolean isTimeEqual(String formattedTime) {
+        Component[] components = Talk_panel_me.getComponents();
+        for (Component comp : components) {
+            if (comp instanceof JPanel) {
+                JPanel panel = (JPanel) comp;
+                for (Component innerComp : panel.getComponents()) {
+                    if (innerComp instanceof JLabel) {
+                        JLabel label = (JLabel) innerComp;
+                        // 시간을 표시하는 JLabel을 찾아서 비교
+                        if (label.getText().equals(formattedTime)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
