@@ -12,6 +12,9 @@ public class Home_Page {
 
     private static boolean isTalk_myself_Open = false;
 
+    private static JLabel Me;
+    private static JLabel My_Profile;
+
     public static void Home() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -29,6 +32,8 @@ public class Home_Page {
         Home_panel.setLayout(null);
         Home_panel.setOpaque(false);
         Home_panel.setBounds(0, 0, 72, 104);
+
+        Friends_Page(Home_panel);
 
         JLabel Background = new JLabel();
         Background.setOpaque(false);
@@ -96,7 +101,51 @@ public class Home_Page {
             }
         });
 
-        JLabel Me = new JLabel();
+        JLabel Chatting = new JLabel();
+        Chatting.setBounds(20,118,25,25);
+        Chatting.setOpaque(false);
+        Chatting.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e){
+                Chatting_Page(Home_panel);
+            }
+        });
+
+        JLabel Friends = new JLabel();
+        Friends.setBounds(20,62,25,25);
+        Friends.setOpaque(false);
+        Friends.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e){
+                Friends_Page(Home_panel);
+            }
+        });
+
+//        // ESC 키 설정
+//        Home_panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "closeWindow");
+//        Home_panel.getActionMap().put("closeWindow", new AbstractAction() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                K_Icon.setHome_PageOpen(true);
+//                frame_Home.dispose();
+//            }
+//        });
+
+
+        Home_panel.add(Friends);
+        Home_panel.add(Chatting);
+
+        Home_panel.add(X_button);
+        Home_panel.add(X_button_Box);
+        Home_panel.add(Move);
+
+        Home_panel.add(Background);
+
+        frame_Home.add(Home_panel);
+        frame_Home.setVisible(true);
+    }
+    private static void Friends_Page(JPanel Home_panel){
+        isTalk_myself_Open = false;
+        System.out.println("Friends");
+        Me = new JLabel();
         Me.setBounds(65, 56, 333, 70);
         Me.setBackground(new Color(0, 0, 0, 0));
         Me.setOpaque(true);
@@ -121,7 +170,7 @@ public class Home_Page {
             }
         });
 
-        JLabel My_Profile = new JLabel();
+        My_Profile = new JLabel();
         My_Profile.setBounds(85, 63, 56, 56);
         My_Profile.setOpaque(false);
         My_Profile.addMouseListener(new MouseAdapter() {
@@ -130,29 +179,19 @@ public class Home_Page {
             }
         });
 
-
-//        // ESC 키 설정
-//        Home_panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "closeWindow");
-//        Home_panel.getActionMap().put("closeWindow", new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                K_Icon.setHome_PageOpen(true);
-//                frame_Home.dispose();
-//            }
-//        });
-
         Home_panel.add(Me);
         Home_panel.add(My_Profile, 0);
-
-        Home_panel.add(X_button);
-        Home_panel.add(X_button_Box);
-        Home_panel.add(Move);
-
-        Home_panel.add(Background);
-
-        frame_Home.add(Home_panel);
-        frame_Home.setVisible(true);
     }
+    private static void Chatting_Page(JPanel Home_panel){
+        isTalk_myself_Open = true;
+
+        System.out.println("Chatting");
+        Home_panel.remove(Me);
+        Home_panel.remove(My_Profile);
+        Home_panel.revalidate();
+        Home_panel.repaint();
+    }
+
 
     public static void My_Profile_Frame() {
         try {
@@ -202,7 +241,6 @@ public class Home_Page {
         TalkMyself.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 frame_my_profile.dispose();// 창 닫기
-
                 if (!isTalk_myself_Open) {
                     isTalk_myself_Open = true;
                     TalkPage_Me.TalkPage();

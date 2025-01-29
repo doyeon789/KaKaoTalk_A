@@ -14,7 +14,6 @@ public class TalkPage_Me {
     static JTextArea InputArea = new JTextArea("메시지 입력");
     static JPanel Talk_panel_me = new JPanel();
     static JLabel sending = new JLabel();
-    static JLabel X_button = new JLabel();
     static JLabel Move = new JLabel();
 
 
@@ -164,6 +163,7 @@ public class TalkPage_Me {
             }
         });
 
+        JLabel X_button = new JLabel();
         X_button.setOpaque(false);
         X_button.setBounds(5, 3, 56, 21);
         ImageIcon X_buttonI = new ImageIcon("image/COM/X.png");
@@ -176,8 +176,9 @@ public class TalkPage_Me {
         X_button_Box.setBounds(10,5,18,18);
         X_button_Box.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                Home_Page.setTalk_myself_Open(false);
                 frame_Talk_me.dispose();
+                Home_Page.setTalk_myself_Open(false);
+                System.out.println("hi");
             }
 
             public void mouseEntered(MouseEvent e) {
@@ -214,17 +215,6 @@ public class TalkPage_Me {
         frame_Talk_me.add(Talk_panel_me);
         frame_Talk_me.setVisible(true);
     }
-
-//    private static void send() {
-//        if (InputArea.getText().isEmpty()) {
-//            return;
-//        }
-//
-//        Chat_Talkmyself.Chat(InputArea.getText(),Talk_panel_me);
-//
-//        InputArea.setText(null);
-//    }
-
     private static void send() {
         if (InputArea.getText().isEmpty()) {
             return;
