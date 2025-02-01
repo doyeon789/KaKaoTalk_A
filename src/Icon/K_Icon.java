@@ -17,13 +17,16 @@ public class K_Icon {
 
         if (Taskbar.isTaskbarSupported()) {
             Taskbar taskbar = Taskbar.getTaskbar();
-            Image icon = Toolkit.getDefaultToolkit().getImage("image/Icon/icon.png"); // 아이콘 파일 지정
+            Image originalIcon = Toolkit.getDefaultToolkit().getImage("image/Icon/icon.png");
+            Image scaledIcon = originalIcon.getScaledInstance(64, 64, Image.SCALE_SMOOTH); // 크기 조정
+
             try {
-                taskbar.setIconImage(icon);
+                taskbar.setIconImage(scaledIcon);
             } catch (UnsupportedOperationException | SecurityException e) {
                 e.printStackTrace();
             }
         }
+
 
         JFrame frame = new JFrame("");
 
