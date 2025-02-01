@@ -180,7 +180,6 @@ public class TalkPage_Me {
                 isTalk_myself_Open = false;
                 Home_Page.setTalk_myself_Open(false);
                 frame_Talk_me.dispose();
-                System.out.println("HI");
             }
 
             public void mouseEntered(MouseEvent e) {
