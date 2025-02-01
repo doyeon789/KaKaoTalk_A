@@ -12,8 +12,6 @@ public class Home_Page {
 
     private static boolean isTalk_myself_Open = false;
 
-    private static JLabel Me;
-    private static JLabel My_Profile;
 
     public static void Home() {
         try {
@@ -31,17 +29,19 @@ public class Home_Page {
         JPanel Home_panel = new JPanel();
         Home_panel.setLayout(null);
         Home_panel.setOpaque(false);
-        Home_panel.setBounds(0, 0, 72, 104);
+        Home_panel.setBounds(0, 0, 398, 639);
 
-        Friends_Page(Home_panel);
+        JPanel Chatting_Panel = new JPanel();
+        Chatting_Panel.setLayout(null);
+        Chatting_Panel.setOpaque(false);
+        Chatting_Panel.setBounds(0, 0, 398, 639);
 
-        JLabel Background = new JLabel();
-        Background.setOpaque(false);
-        Background.setBounds(0, 0, 398, 639);
-        ImageIcon BackgroundI = new ImageIcon("image/Home/Home.PNG");
-        Image Background_img = BackgroundI.getImage();
-        Image Background_logo = Background_img.getScaledInstance(398, 639, Image.SCALE_SMOOTH);
-        Background.setIcon(new ImageIcon(Background_logo));
+        JPanel Friends_Panel = new JPanel();
+        Friends_Panel.setLayout(null);
+        Friends_Panel.setOpaque(false);
+        Friends_Panel.setBounds(0, 0, 398, 639);
+
+        Friends_Page(Friends_Panel);
 
         final Point[] mouseClickPoint = {null};
 
@@ -106,7 +106,9 @@ public class Home_Page {
         Chatting.setOpaque(false);
         Chatting.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e){
-                Chatting_Page(Home_panel);
+                Chatting_Panel.setVisible(true);
+                Friends_Panel.setVisible(false);
+                Chatting_Page(Chatting_Panel);
             }
         });
 
@@ -115,7 +117,9 @@ public class Home_Page {
         Friends.setOpaque(false);
         Friends.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e){
-                Friends_Page(Home_panel);
+                Chatting_Panel.setVisible(false);
+                Friends_Panel.setVisible(true);
+                Friends_Page(Friends_Panel);
             }
         });
 
@@ -129,7 +133,6 @@ public class Home_Page {
 //            }
 //        });
 
-
         Home_panel.add(Friends);
         Home_panel.add(Chatting);
 
@@ -137,15 +140,24 @@ public class Home_Page {
         Home_panel.add(X_button_Box);
         Home_panel.add(Move);
 
-        Home_panel.add(Background);
+        Home_panel.add(Friends_Panel);
+        Home_panel.add(Chatting_Panel);
 
         frame_Home.add(Home_panel);
         frame_Home.setVisible(true);
     }
-    private static void Friends_Page(JPanel Home_panel){
+    private static void Friends_Page(JPanel Friends_Panel){
+        JLabel Background = new JLabel();
+        Background.setOpaque(false);
+        Background.setBounds(0, 0, 398, 639);
+        ImageIcon BackgroundI = new ImageIcon("image/Home/Home.PNG");
+        Image Background_img = BackgroundI.getImage();
+        Image Background_logo = Background_img.getScaledInstance(398, 639, Image.SCALE_SMOOTH);
+        Background.setIcon(new ImageIcon(Background_logo));
+
         isTalk_myself_Open = false;
         System.out.println("Friends");
-        Me = new JLabel();
+        JLabel Me = new JLabel();
         Me.setBounds(65, 56, 333, 70);
         Me.setBackground(new Color(0, 0, 0, 0));
         Me.setOpaque(true);
@@ -159,18 +171,18 @@ public class Home_Page {
 
             public void mouseEntered(MouseEvent e) {
                 Me.setBackground(new Color(0, 0, 0, 20));
-                Home_panel.revalidate();
-                Home_panel.repaint();
+                Friends_Panel.revalidate();
+                Friends_Panel.repaint();
             }
 
             public void mouseExited(MouseEvent e) {
                 Me.setBackground(new Color(0, 0, 0, 0));
-                Home_panel.revalidate();
-                Home_panel.repaint();
+                Friends_Panel.revalidate();
+                Friends_Panel.repaint();
             }
         });
 
-        My_Profile = new JLabel();
+        JLabel My_Profile = new JLabel();
         My_Profile.setBounds(85, 63, 56, 56);
         My_Profile.setOpaque(false);
         My_Profile.addMouseListener(new MouseAdapter() {
@@ -179,17 +191,25 @@ public class Home_Page {
             }
         });
 
-        Home_panel.add(Me);
-        Home_panel.add(My_Profile, 0);
+        Friends_Panel.add(Me);
+        Friends_Panel.add(My_Profile, 0);
+
+        Friends_Panel.add(Background);
     }
-    private static void Chatting_Page(JPanel Home_panel){
+    private static void Chatting_Page(JPanel Chatting_Panel){
         isTalk_myself_Open = true;
 
+        JLabel Background = new JLabel();
+        Background.setOpaque(false);
+        Background.setBounds(0, 0, 398, 639);
+        ImageIcon BackgroundI = new ImageIcon("image/Home/Home_F.PNG");
+        Image Background_img = BackgroundI.getImage();
+        Image Background_logo = Background_img.getScaledInstance(398, 639, Image.SCALE_SMOOTH);
+        Background.setIcon(new ImageIcon(Background_logo));
+
+
         System.out.println("Chatting");
-        Home_panel.remove(Me);
-        Home_panel.remove(My_Profile);
-        Home_panel.revalidate();
-        Home_panel.repaint();
+        Chatting_Panel.add(Background);
     }
 
 
