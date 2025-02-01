@@ -9,14 +9,14 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import static TalkPage_Me.Chat_Talkmyself.chat_cnt;
+import static Home.Home_Page.isTalk_myself_Open;
 
 public class TalkPage_Me {
     static JTextArea InputArea = new JTextArea("메시지 입력");
     static JPanel Talk_panel_me = new JPanel();
     static JLabel sending = new JLabel();
-    static JLabel Move = new JLabel();
 
-
+    static JFrame frame_Talk_me = new JFrame("");
     public static void TalkPage(){
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -24,7 +24,6 @@ public class TalkPage_Me {
             e.printStackTrace();
         }
 
-        JFrame frame_Talk_me = new JFrame("");
         frame_Talk_me.setSize(379, 639);
         frame_Talk_me.setLocation(720,285);
         frame_Talk_me.setUndecorated(true);
@@ -129,9 +128,9 @@ public class TalkPage_Me {
         Talk_panel_me.add(sending,0);
         Talk_panel_me.add(scrollPane,0);
 
-        Init_Workig(frame_Talk_me,Talk_panel_me);
+        Init_Workig(Talk_panel_me);
     }
-    private static void Init_Workig(JFrame frame_Talk_me,JPanel Talk_panel_me){
+    private static void Init_Workig(JPanel Talk_panel_me){
         JLabel Talk_Background_me = new JLabel();
         Talk_Background_me.setOpaque(false);
         Talk_Background_me.setBounds(0, 0, 379, 639);
@@ -142,6 +141,7 @@ public class TalkPage_Me {
 
         final Point[] mouseClickPoint = {null};
 
+        JLabel Move = new JLabel();
         Move.setOpaque(false);
         Move.setBounds(65,0,332,40);
         Move.addMouseListener(new MouseAdapter() {
@@ -176,9 +176,11 @@ public class TalkPage_Me {
         X_button_Box.setBounds(10,5,18,18);
         X_button_Box.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                frame_Talk_me.dispose();
+                X_button.setVisible(false);
+                isTalk_myself_Open = false;
                 Home_Page.setTalk_myself_Open(false);
-                System.out.println("hi");
+                frame_Talk_me.dispose();
+                System.out.println("HI");
             }
 
             public void mouseEntered(MouseEvent e) {
@@ -186,7 +188,7 @@ public class TalkPage_Me {
                 X_button.setVisible(true);
                 Talk_panel_me.revalidate();
                 Talk_panel_me.repaint();
-                X_button_Box.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                X_button_Box.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
 
             public void mouseExited(MouseEvent e) {
@@ -198,17 +200,21 @@ public class TalkPage_Me {
             }
         });
 
+
         Talk_panel_me.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "closeWindow");
         Talk_panel_me.getActionMap().put("closeWindow", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                X_button.setVisible(false);
+                isTalk_myself_Open = false;
                 Home_Page.setTalk_myself_Open(false);
                 frame_Talk_me.dispose();
             }
         });
 
-        Talk_panel_me.add(X_button);
         Talk_panel_me.add(X_button_Box);
+        Talk_panel_me.add(X_button);
+
         Talk_panel_me.add(Move);
         Talk_panel_me.add(Talk_Background_me);
 

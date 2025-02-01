@@ -14,6 +14,17 @@ public class K_Icon {
     private static boolean isHome_PageOpen = false; // private으로 변경
 
     public K_Icon() {
+
+        if (Taskbar.isTaskbarSupported()) {
+            Taskbar taskbar = Taskbar.getTaskbar();
+            Image icon = Toolkit.getDefaultToolkit().getImage("image/Icon/icon.png"); // 아이콘 파일 지정
+            try {
+                taskbar.setIconImage(icon);
+            } catch (UnsupportedOperationException | SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+
         JFrame frame = new JFrame("");
 
         // 사이즈 설정

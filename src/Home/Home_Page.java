@@ -10,8 +10,7 @@ import TalkPage_Me.TalkPage_Me;
 public class Home_Page {
     static JFrame frame_Home = new JFrame("");
 
-    private static boolean isTalk_myself_Open = false;
-
+    public static boolean isTalk_myself_Open = false;
 
     public static void Home() {
         try {
@@ -81,6 +80,7 @@ public class Home_Page {
         X_button_Box.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 K_Icon.setHome_PageOpen(false);
+                X_button.setVisible(false);
                 frame_Home.dispose();
             }
 
@@ -123,15 +123,16 @@ public class Home_Page {
             }
         });
 
-//        // ESC 키 설정
-//        Home_panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "closeWindow");
-//        Home_panel.getActionMap().put("closeWindow", new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                K_Icon.setHome_PageOpen(true);
-//                frame_Home.dispose();
-//            }
-//        });
+        // ESC 키 설정
+        Home_panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "closeWindow");
+        Home_panel.getActionMap().put("closeWindow", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                X_button.setVisible(false);
+                K_Icon.setHome_PageOpen(false);
+                frame_Home.dispose();
+            }
+        });
 
         Home_panel.add(Friends);
         Home_panel.add(Chatting);
@@ -155,8 +156,6 @@ public class Home_Page {
         Image Background_logo = Background_img.getScaledInstance(398, 639, Image.SCALE_SMOOTH);
         Background.setIcon(new ImageIcon(Background_logo));
 
-        isTalk_myself_Open = false;
-        System.out.println("Friends");
         JLabel Me = new JLabel();
         Me.setBounds(65, 56, 333, 70);
         Me.setBackground(new Color(0, 0, 0, 0));
@@ -197,7 +196,6 @@ public class Home_Page {
         Friends_Panel.add(Background);
     }
     private static void Chatting_Page(JPanel Chatting_Panel){
-        isTalk_myself_Open = true;
 
         JLabel Background = new JLabel();
         Background.setOpaque(false);
@@ -207,8 +205,32 @@ public class Home_Page {
         Image Background_logo = Background_img.getScaledInstance(398, 639, Image.SCALE_SMOOTH);
         Background.setIcon(new ImageIcon(Background_logo));
 
+        JLabel Me = new JLabel();
+        Me.setBounds(65, 56, 333, 70);
+        Me.setBackground(new Color(0, 0, 0, 0));
+        Me.setOpaque(true);
+        Me.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (!isTalk_myself_Open) {
+                    isTalk_myself_Open = true;
+                    TalkPage_Me.TalkPage();
+                }
+            }
 
-        System.out.println("Chatting");
+            public void mouseEntered(MouseEvent e) {
+                Me.setBackground(new Color(0, 0, 0, 20));
+                Chatting_Panel.revalidate();
+                Chatting_Panel.repaint();
+            }
+
+            public void mouseExited(MouseEvent e) {
+                Me.setBackground(new Color(0, 0, 0, 0));
+                Chatting_Panel.revalidate();
+                Chatting_Panel.repaint();
+            }
+        });
+
+        Chatting_Panel.add(Me);
         Chatting_Panel.add(Background);
     }
 
