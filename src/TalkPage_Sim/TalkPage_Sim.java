@@ -1,4 +1,4 @@
-package TalkPage_Me;
+package TalkPage_Sim;
 
 import Home.Home_Page;
 
@@ -8,10 +8,10 @@ import java.awt.event.*;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import static TalkPage_Me.Chat_Talkmyself.chat_cnt;
-import static Home.Home_Page.isTalk_myself_Open;
+import static TalkPage_Sim.Chat_TalkSim.chat_cntS;
+import static Home.Home_Page.isTalk_Sim_Open;
 
-public class TalkPage_Me {
+public class TalkPage_Sim {
     static JTextArea InputArea = new JTextArea("메시지 입력");
     static JPanel Talk_panel_me = new JPanel();
     static JLabel sending = new JLabel();
@@ -45,7 +45,7 @@ public class TalkPage_Me {
         InputArea.setForeground(new Color(139,139,139));
         InputArea.setOpaque(false);
 
-       // InputArea.setBackground(Color.white);
+        // InputArea.setBackground(Color.white);
         InputArea.setBounds(0,0,370,72);
         InputArea.setLineWrap(true);
         InputArea.setWrapStyleWord(true);
@@ -134,7 +134,7 @@ public class TalkPage_Me {
         JLabel Talk_Background_me = new JLabel();
         Talk_Background_me.setOpaque(false);
         Talk_Background_me.setBounds(0, 0, 379, 639);
-        ImageIcon Talk_B_meI = new ImageIcon("image/TalkPage/TalkPage_Me.png");
+        ImageIcon Talk_B_meI = new ImageIcon("image/TalkPage/TalkPage_Sim.png");
         Image Talk_B_me_img = Talk_B_meI.getImage();
         Image Talk_B_me_logo = Talk_B_me_img.getScaledInstance(379, 639, Image.SCALE_SMOOTH);
         Talk_Background_me.setIcon(new ImageIcon(Talk_B_me_logo));
@@ -177,7 +177,7 @@ public class TalkPage_Me {
         X_button_Box.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 X_button.setVisible(false);
-                isTalk_myself_Open = false;
+                isTalk_Sim_Open = false;
                 Home_Page.setTalk_myself_Open(false);
                 frame_Talk_me.dispose();
             }
@@ -205,7 +205,7 @@ public class TalkPage_Me {
             @Override
             public void actionPerformed(ActionEvent e) {
                 X_button.setVisible(false);
-                isTalk_myself_Open = false;
+                isTalk_Sim_Open = false;
                 Home_Page.setTalk_myself_Open(false);
                 frame_Talk_me.dispose();
             }
@@ -231,12 +231,12 @@ public class TalkPage_Me {
         String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
         // 이전 메시지와 시간이 동일하면 시간 정보 삭제
-        if (chat_cnt > 0 && isTimeEqual(formattedTime)) {
+        if (chat_cntS > 0 && isTimeEqual(formattedTime)) {
             // 시간이 같으면 중복된 시간은 출력하지 않음
             formattedTime = "";
         }
 
-        Chat_Talkmyself.Chat(messageText, Talk_panel_me, formattedTime);
+        Chat_TalkSim.Chat(messageText, Talk_panel_me, formattedTime);
         InputArea.setText(null);
     }
 

@@ -1,4 +1,4 @@
-package TalkPage_Me;
+package TalkPage_Sim;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,30 +7,26 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static Home.Home_Page.Current_Time;
-import static Home.Home_Page.Current_Chat;
 
-public class Chat_Talkmyself {
-
+public class Chat_TalkSim {
     static JPanel chat_scroll = new JPanel();
-    static int chat_cnt = 0;
-    static int time_cnt = 0;
+    static int chat_cntS = 0;
+    static int time_cntS = 0;
     static JLabel STR;
     static ArrayList<LocalTime> messageTimes = new ArrayList<LocalTime>();
     static ArrayList<String> messageMinutes = new ArrayList<String>();
     static boolean isTextFirst = false;
 
-    // Chat 메서드 내에서 STR 초기화
-    public static void Chat(String chat_str, JPanel Talk_Panel_me, String O_time) {
-        Current_Chat = chat_str;
+    public static void Chat(String chat_str, JPanel Talk_Panel_Me,String O_time){
+        chat_cntS++;
+        time_cntS++;
 
-        chat_cnt++;
-        time_cnt++;
-
-        Talk_Panel_me.revalidate();
-        Talk_Panel_me.repaint();
+        Talk_Panel_Me.revalidate();
+        Talk_Panel_Me.repaint();
 
         // chat_scroll 패널 생성 및 설정
         chat_scroll.setBounds(0,85,379,430);
+        chat_scroll.setOpaque(false);
         chat_scroll.setOpaque(false);
         chat_scroll.setLayout(new BoxLayout(chat_scroll, BoxLayout.Y_AXIS));
         chat_scroll.revalidate();
@@ -40,14 +36,13 @@ public class Chat_Talkmyself {
         JScrollPane scrollPane = new JScrollPane(chat_scroll);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBounds(0, 85, 379, 430);
-        scrollPane.setOpaque(false);
+        scrollPane.setBounds(0,85,379,430);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         JScrollBar verticalBar = scrollPane.getVerticalScrollBar();
-        verticalBar.setOpaque(false); // 스크롤바를 투명하게
+        verticalBar.setOpaque(false);
         verticalBar.setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
             @Override
             protected void configureScrollBarColors() {
@@ -94,40 +89,38 @@ public class Chat_Talkmyself {
             }
         });
 
+        JPanel messagePanel_Me = new JPanel();
+        messagePanel_Me.setName("messagePanel_Me"+time_cntS);
+        messagePanel_Me.setOpaque(false);
+        messagePanel_Me.setPreferredSize(new Dimension(379,31));
+        messagePanel_Me.setLayout(new FlowLayout(FlowLayout.RIGHT, 2, 7));
 
-        JPanel messagePanel = new JPanel();
-        messagePanel.setName("messagePanel"+time_cnt);
-        messagePanel.setOpaque(false);
-        messagePanel.setPreferredSize(new Dimension(379,31));
-        messagePanel.setLayout(new FlowLayout(FlowLayout.RIGHT,2,7));
-
-        JPanel gluedPanel = new JPanel();
-        gluedPanel.setName("gluedPanel"+time_cnt);
-        gluedPanel.setLayout(new BorderLayout());
-        gluedPanel.add(messagePanel, BorderLayout.CENTER);
-        gluedPanel.setMaximumSize(new Dimension(350, 31)); // 패널 크기 고정
-        gluedPanel.setOpaque(false);
+        JPanel gluedPanel_Me = new JPanel();
+        gluedPanel_Me.setName("gluedPanel_Me"+time_cntS);
+        gluedPanel_Me.setLayout(new BorderLayout());
+        gluedPanel_Me.add(messagePanel_Me, BorderLayout.CENTER);
+        gluedPanel_Me.setMaximumSize(new Dimension(350,31));
+        gluedPanel_Me.setOpaque(false);
 
         // 시간 입력
-        DateTimeFormatter originalFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
-        DateTimeFormatter targetFormat = DateTimeFormatter.ofPattern("a h:mm");
-        LocalTime localTime = LocalTime.parse(O_time, originalFormat);
-        String time = localTime.format(targetFormat);
-        JLabel time_label = new JLabel(time);
-        time_label.setFont(new Font("Arial",Font.PLAIN,10));
-        time_label.setForeground(Color.darkGray);
-        time_label.setPreferredSize(new Dimension(time_label.getPreferredSize().width+8, time_label.getPreferredSize().height));
+        DateTimeFormatter originalFormat_Me = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter targetFormat_Me = DateTimeFormatter.ofPattern("a h:mm");
+        LocalTime localTime_Me = LocalTime.parse(O_time, originalFormat_Me);
+        String time_Me = localTime_Me.format(targetFormat_Me);
+        JLabel time_label_Me = new JLabel(time_Me);
+        time_label_Me.setFont(new Font("Arial",Font.PLAIN,10));
+        time_label_Me.setForeground(Color.darkGray);
+        time_label_Me.setPreferredSize(new Dimension(time_label_Me.getPreferredSize().width+8, time_label_Me.getPreferredSize().height));
 
-        Current_Time = targetFormat;
+        Current_Time = targetFormat_Me;
 
-        LocalTime time_now = LocalTime.now(); // 현재 시간
-        String minutes_time = time_now.format(DateTimeFormatter.ofPattern("HH:mm"));
+        LocalTime time_now_Me = LocalTime.now();
+        String minutes_time_Me = time_now_Me.format(DateTimeFormatter.ofPattern("HH:mm"));
 
-
-        messageTimes.add(time_now);
-        messageMinutes.add(minutes_time);
-        messagePanel.add(time_label);
-        time_label.setName("time_label"+time_cnt);
+        messageTimes.add(time_now_Me);
+        messageMinutes.add(minutes_time_Me);
+        messagePanel_Me.add(time_label_Me);
+        time_label_Me.setName("time_label_Me"+time_cntS);
 
         if(!isTextFirst){
             isTextFirst = true;
@@ -136,11 +129,11 @@ public class Chat_Talkmyself {
         else{
             if(messageMinutes.getLast().equals(messageMinutes.get(messageMinutes.size()-2))){
                 if(messageTimes.getLast().isAfter(messageTimes.get(messageTimes.size()-2))){
-                    JPanel G_Panel = findPanelByName(chat_scroll,"gluedPanel"+(time_cnt-1));
+                    JPanel G_Panel = findPanelByName(chat_scroll,"gluedPanel_Me"+(time_cntS-1));
                     if(G_Panel != null){
-                        JPanel M_Panel = findPanelByName(G_Panel, "messagePanel"+(time_cnt-1));
+                        JPanel M_Panel = findPanelByName(G_Panel, "messagePanel_Me"+(time_cntS-1));
                         if (M_Panel != null) {
-                            JLabel T_Label = (JLabel) findComponentByName(M_Panel, "time_label"+(time_cnt-1));
+                            JLabel T_Label = (JLabel) findComponentByName(M_Panel, "time_label_Me"+(time_cntS-1));
                             if (T_Label != null) {
                                 T_Label.setText(" "); // 텍스트 변경
                             }
@@ -149,19 +142,17 @@ public class Chat_Talkmyself {
                 }
             }
         }
-
         // 메시지 입력
         STR = new JLabel(chat_str);
-        JLabel messageLabel = Make_Background_and_Chat(chat_str);
-        messagePanel.add(messageLabel);
-        chat_scroll.add(gluedPanel);
+        JLabel messageLabel_Me = Make_Background_and_Chat(chat_str);
+        messagePanel_Me.add(messageLabel_Me);
+        chat_scroll.add(gluedPanel_Me);
 
+        scrollPane.getViewport().setViewPosition(new Point(0, 31*chat_cntS));
 
-        scrollPane.getViewport().setViewPosition(new Point(0, 31*chat_cnt));
-
-        Talk_Panel_me.add(scrollPane, 0);
-        Talk_Panel_me.revalidate();
-        Talk_Panel_me.repaint();
+        Talk_Panel_Me.add(scrollPane, 0);
+        Talk_Panel_Me.revalidate();
+        Talk_Panel_Me.repaint();
 
     }
 
@@ -248,6 +239,7 @@ public class Chat_Talkmyself {
 
         return Chat_K;
     }
+
     // 특정 이름을 가진 컴포넌트를 찾는 메서드
     private static JComponent findComponentByName(JPanel panel, String name) {
         for (Component comp : panel.getComponents()) {

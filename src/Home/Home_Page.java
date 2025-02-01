@@ -3,14 +3,20 @@ package Home;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.format.DateTimeFormatter;
 
 import Icon.K_Icon;
 import TalkPage_Me.TalkPage_Me;
+import TalkPage_Sim.TalkPage_Sim;
 
 public class Home_Page {
     static JFrame frame_Home = new JFrame("");
 
     public static boolean isTalk_myself_Open = false;
+    public static boolean isTalk_Sim_Open = false;
+
+    public static String Current_Chat = "";
+    public static DateTimeFormatter Current_Time;
 
     public static void Home() {
         try {
@@ -206,7 +212,7 @@ public class Home_Page {
         Background.setIcon(new ImageIcon(Background_logo));
 
         JLabel Me = new JLabel();
-        Me.setBounds(65, 56, 333, 70);
+        Me.setBounds(65, 125, 333, 60);
         Me.setBackground(new Color(0, 0, 0, 0));
         Me.setOpaque(true);
         Me.addMouseListener(new MouseAdapter() {
@@ -230,6 +236,30 @@ public class Home_Page {
             }
         });
 
+        JLabel Sim = new JLabel();
+        Sim.setBounds(65,65,333,60);
+        Sim.setBackground(new Color(0,0,0,0));
+        Sim.setOpaque(true);
+        Sim.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e){
+                if (!isTalk_Sim_Open) {
+                    isTalk_Sim_Open = true;
+                    TalkPage_Sim.TalkPage();
+                }
+            }
+            public void mouseEntered(MouseEvent e){
+                Sim.setBackground(new Color(0,0,0,20));
+                Chatting_Panel.revalidate();
+                Chatting_Panel.repaint();
+            }
+            public void mouseExited(MouseEvent e){
+                Sim.setBackground(new Color(0,0,0,0));
+                Chatting_Panel.revalidate();
+                Chatting_Panel.repaint();
+            }
+        });
+
+        Chatting_Panel.add(Sim);
         Chatting_Panel.add(Me);
         Chatting_Panel.add(Background);
     }
@@ -310,4 +340,10 @@ public class Home_Page {
     public static void setTalk_myself_Open(boolean home_PageOpen) {
         isTalk_myself_Open = home_PageOpen;
     }
+
+    // Setter 메서드
+    public static void setTalk_Sim_Open(boolean home_PageOpen) {
+        isTalk_Sim_Open = home_PageOpen;
+    }
+
 }
