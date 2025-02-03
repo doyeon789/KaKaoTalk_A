@@ -12,7 +12,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-import static TalkPage_Sim.Chat_TalkSim.chat_cntS;
+import static TalkPage_Sim.Chat_TalkSim.chat_cnt;
 import static Home.Home_Page.isTalk_Sim_Open;
 
 public class TalkPage_Sim {
@@ -22,6 +22,10 @@ public class TalkPage_Sim {
 
     public static Socket socket;
     public static BufferedWriter out;
+
+    public static String MessageFromSim;
+
+    public static int Mode = 1;
 
     static JFrame frame_Talk_me = new JFrame("");
     public static void TalkPage() throws IOException {
@@ -103,8 +107,8 @@ public class TalkPage_Sim {
         Action sendAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Mode = 1;
                 send();
-                //111
             }
         };
 
@@ -123,6 +127,7 @@ public class TalkPage_Sim {
                     } catch (IOException er) {
                         System.out.println("전송 중 오류 발생: " + er.getMessage());
                     }
+                    Mode = 1;
                     send();
                     sending.setVisible(false);
                 }
@@ -252,7 +257,7 @@ public class TalkPage_Sim {
         String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
         // 이전 메시지와 시간이 동일하면 시간 정보 삭제
-        if (chat_cntS > 0 && isTimeEqual(formattedTime)) {
+        if (chat_cnt > 0 && isTimeEqual(formattedTime)) {
             // 시간이 같으면 중복된 시간은 출력하지 않음
             formattedTime = "";
         }
@@ -293,6 +298,7 @@ public class TalkPage_Sim {
             listener = new ServerSocket(9999);
             System.out.println("연결을 기다리고 있습니다...");
             socket = listener.accept();
+            System.out.println("연결되었습니다");
 
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -301,7 +307,10 @@ public class TalkPage_Sim {
                 try {
                     String inputMessage;
                     while ((inputMessage = in.readLine()) != null) {
-                        System.out.println("\n클라이언트: " + inputMessage);
+                        MessageFromSim = inputMessage;
+                        System.out.println(MessageFromSim);
+                        Mode = 2;
+                        send();
                     }
                 } catch (IOException e) {
                     System.out.println("수신 중 오류 발생: " + e.getMessage());
@@ -324,7 +333,6 @@ public class TalkPage_Sim {
         }
     }
     private static void SendMessage(){
-
         InputArea.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("ENTER"),"send");
         InputArea.getActionMap().put("send",sendAction1);
 
@@ -345,7 +353,6 @@ public class TalkPage_Sim {
     static Action sendAction1= new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
-
             if (InputArea.getText().isEmpty()) {
                 return;
             }
@@ -357,7 +364,7 @@ public class TalkPage_Sim {
             } catch (IOException er) {
                 System.out.println("전송 중 오류 발생: " + er.getMessage());
             }
-
+            Mode = 1;
             send();
         }
     };
