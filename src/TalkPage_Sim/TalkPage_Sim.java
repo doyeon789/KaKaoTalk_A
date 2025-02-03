@@ -20,9 +20,7 @@ public class TalkPage_Sim {
     static JPanel Talk_panel_me = new JPanel();
     static JLabel sending = new JLabel();
 
-    public static ServerSocket listener;
     public static Socket socket;
-    public static BufferedReader in;
     public static BufferedWriter out;
 
     static JFrame frame_Talk_me = new JFrame("");
@@ -106,6 +104,7 @@ public class TalkPage_Sim {
             @Override
             public void actionPerformed(ActionEvent e) {
                 send();
+                //111
             }
         };
 
@@ -113,6 +112,17 @@ public class TalkPage_Sim {
             public void mousePressed(MouseEvent e){
                 if(sending.isVisible()) {
                     Talk_panel_me.repaint();
+                    if (InputArea.getText().isEmpty()) {
+                        return;
+                    }
+                    String outputMessage = InputArea.getText();
+
+                    try {
+                        out.write(outputMessage + "\n");
+                        out.flush();
+                    } catch (IOException er) {
+                        System.out.println("전송 중 오류 발생: " + er.getMessage());
+                    }
                     send();
                     sending.setVisible(false);
                 }
@@ -238,7 +248,6 @@ public class TalkPage_Sim {
 
         String messageText = InputArea.getText();
 
-
         LocalTime currentTime = LocalTime.now(); // 현재 시간
         String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
@@ -278,20 +287,15 @@ public class TalkPage_Sim {
         }
         return false;
     }
-
-
-
     private static void Chatting() {
-        Scanner scanner = new Scanner(System.in);
-
+        ServerSocket listener = null;
         try {
             listener = new ServerSocket(9999);
             System.out.println("연결을 기다리고 있습니다...");
             socket = listener.accept();
-            System.out.println("연결되었습니다");
 
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
             Thread receiveThread = new Thread(() -> {
                 try {
@@ -303,26 +307,9 @@ public class TalkPage_Sim {
                     System.out.println("수신 중 오류 발생: " + e.getMessage());
                 }
             });
-
-            Thread sendThread = new Thread(() -> {
-                try {
-                    while (true) {
-                        System.out.print("\n보내기 >> ");
-                        String outputMessage = scanner.nextLine();
-                        // 종료 명령어가 입력되면 채팅을 종료
-                        if (outputMessage.equalsIgnoreCase("exit")) {
-                            break;
-                        }
-                        out.write(outputMessage + "\n");
-                        out.flush();
-                    }
-                } catch (IOException e) {
-                    System.out.println("전송 중 오류 발생: " + e.getMessage());
-                }
-            });
-
+            SendMessage();
             receiveThread.start();
-            sendThread.start();
+
             // receiveThread가 종료될 때까지 기다림
             receiveThread.join();
         } catch (IOException | InterruptedException e) {
@@ -336,5 +323,42 @@ public class TalkPage_Sim {
             }
         }
     }
+    private static void SendMessage(){
 
+        InputArea.getInputMap().put(javax.swing.KeyStroke.getKeyStroke("ENTER"),"send");
+        InputArea.getActionMap().put("send",sendAction1);
+
+        Scanner scanner = new Scanner(System.in);
+        Thread sendThread = new Thread(() -> {
+            try {
+                while (true) {
+                    String outputMessage = scanner.nextLine();
+                    out.write(outputMessage + "\n");
+                    out.flush();
+                }
+            } catch (IOException e) {
+                System.out.println("전송 중 오류 발생: " + e.getMessage());
+            }
+        });
+        sendThread.start();
+    }
+    static Action sendAction1= new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if (InputArea.getText().isEmpty()) {
+                return;
+            }
+            String outputMessage = InputArea.getText();
+
+            try {
+                out.write(outputMessage + "\n");
+                out.flush();
+            } catch (IOException er) {
+                System.out.println("전송 중 오류 발생: " + er.getMessage());
+            }
+
+            send();
+        }
+    };
 }
