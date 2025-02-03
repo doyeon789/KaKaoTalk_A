@@ -5,8 +5,12 @@ import Home.Home_Page;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 import static TalkPage_Sim.Chat_TalkSim.chat_cntS;
 import static Home.Home_Page.isTalk_Sim_Open;
@@ -16,13 +20,20 @@ public class TalkPage_Sim {
     static JPanel Talk_panel_me = new JPanel();
     static JLabel sending = new JLabel();
 
+    public static ServerSocket listener;
+    public static Socket socket;
+    public static BufferedReader in;
+    public static BufferedWriter out;
+
     static JFrame frame_Talk_me = new JFrame("");
-    public static void TalkPage(){
+    public static void TalkPage() throws IOException {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Thread chatting = new Thread(TalkPage_Sim::Chatting);
+        chatting.start();
 
         frame_Talk_me.setSize(379, 639);
         frame_Talk_me.setLocation(720,285);
@@ -227,6 +238,7 @@ public class TalkPage_Sim {
 
         String messageText = InputArea.getText();
 
+
         LocalTime currentTime = LocalTime.now(); // 현재 시간
         String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
@@ -266,4 +278,63 @@ public class TalkPage_Sim {
         }
         return false;
     }
+
+
+
+    private static void Chatting() {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            listener = new ServerSocket(9999);
+            System.out.println("연결을 기다리고 있습니다...");
+            socket = listener.accept();
+            System.out.println("연결되었습니다");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+            Thread receiveThread = new Thread(() -> {
+                try {
+                    String inputMessage;
+                    while ((inputMessage = in.readLine()) != null) {
+                        System.out.println("\n클라이언트: " + inputMessage);
+                    }
+                } catch (IOException e) {
+                    System.out.println("수신 중 오류 발생: " + e.getMessage());
+                }
+            });
+
+            Thread sendThread = new Thread(() -> {
+                try {
+                    while (true) {
+                        System.out.print("\n보내기 >> ");
+                        String outputMessage = scanner.nextLine();
+                        // 종료 명령어가 입력되면 채팅을 종료
+                        if (outputMessage.equalsIgnoreCase("exit")) {
+                            break;
+                        }
+                        out.write(outputMessage + "\n");
+                        out.flush();
+                    }
+                } catch (IOException e) {
+                    System.out.println("전송 중 오류 발생: " + e.getMessage());
+                }
+            });
+
+            receiveThread.start();
+            sendThread.start();
+            // receiveThread가 종료될 때까지 기다림
+            receiveThread.join();
+        } catch (IOException | InterruptedException e) {
+            System.out.println("오류 발생: " + e.getMessage());
+        } finally {
+            try {
+                if (socket != null && !socket.isClosed()) socket.close();
+                if (listener != null && !listener.isClosed()) listener.close();
+            } catch (IOException e) {
+                System.out.println("리소스 해제 중 오류 발생: " + e.getMessage());
+            }
+        }
+    }
+
 }

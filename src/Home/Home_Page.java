@@ -3,6 +3,7 @@ package Home;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 
 import Icon.K_Icon;
@@ -187,6 +188,34 @@ public class Home_Page {
             }
         });
 
+        JLabel Sim = new JLabel();
+        Sim.setBounds(65, 260, 333, 60);
+        Sim.setBackground(new Color(0, 0, 0, 0));
+        Sim.setOpaque(true);
+        Sim.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (!isTalk_Sim_Open) {
+                    isTalk_Sim_Open = true;
+                    try {TalkPage_Sim.TalkPage();}
+                    catch (IOException er){
+                        er.printStackTrace();
+                    }
+                }
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                Sim.setBackground(new Color(0, 0, 0, 20));
+                Friends_Panel.revalidate();
+                Friends_Panel.repaint();
+            }
+
+            public void mouseExited(MouseEvent e) {
+                Sim.setBackground(new Color(0, 0, 0, 0));
+                Friends_Panel.revalidate();
+                Friends_Panel.repaint();
+            }
+        });
+
         JLabel My_Profile = new JLabel();
         My_Profile.setBounds(85, 63, 56, 56);
         My_Profile.setOpaque(false);
@@ -196,6 +225,7 @@ public class Home_Page {
             }
         });
 
+        Friends_Panel.add(Sim);
         Friends_Panel.add(Me);
         Friends_Panel.add(My_Profile, 0);
 
@@ -244,7 +274,12 @@ public class Home_Page {
             public void mousePressed(MouseEvent e){
                 if (!isTalk_Sim_Open) {
                     isTalk_Sim_Open = true;
-                    TalkPage_Sim.TalkPage();
+                    try {
+                        TalkPage_Sim.TalkPage();
+                    }
+                    catch (IOException er){
+                        er.printStackTrace();
+                    }
                 }
             }
             public void mouseEntered(MouseEvent e){
@@ -340,10 +375,4 @@ public class Home_Page {
     public static void setTalk_myself_Open(boolean home_PageOpen) {
         isTalk_myself_Open = home_PageOpen;
     }
-
-    // Setter 메서드
-    public static void setTalk_Sim_Open(boolean home_PageOpen) {
-        isTalk_Sim_Open = home_PageOpen;
-    }
-
 }

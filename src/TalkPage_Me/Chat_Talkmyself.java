@@ -156,7 +156,6 @@ public class Chat_Talkmyself {
         messagePanel.add(messageLabel);
         chat_scroll.add(gluedPanel);
 
-
         scrollPane.getViewport().setViewPosition(new Point(0, 31*chat_cnt));
 
         Talk_Panel_me.add(scrollPane, 0);
@@ -260,7 +259,6 @@ public class Chat_Talkmyself {
         }
         return null;
     }
-
     // 특정 이름을 가진 패널을 찾는 메서드
     private static JPanel findPanelByName(JPanel panel, String name) {
         for (Component comp : panel.getComponents()) {

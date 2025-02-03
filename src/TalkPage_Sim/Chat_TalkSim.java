@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import static Home.Home_Page.Current_Time;
 
+
 public class Chat_TalkSim {
     static JPanel chat_scroll = new JPanel();
     static int chat_cntS = 0;
@@ -18,6 +19,7 @@ public class Chat_TalkSim {
     static boolean isTextFirst = false;
 
     public static void Chat(String chat_str, JPanel Talk_Panel_Me,String O_time){
+
         chat_cntS++;
         time_cntS++;
 
