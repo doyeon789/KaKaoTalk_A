@@ -107,6 +107,17 @@ public class TalkPage_Sim {
         Action sendAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (InputArea.getText().isEmpty() || (InputArea.getText().equals("메시지 입력") && InputArea.getForeground().equals(new Color(139,139,139)))) {
+                    return;
+                }
+                String outputMessage = InputArea.getText();
+
+                try {
+                    out.write(outputMessage + "\n");
+                    out.flush();
+                } catch (IOException er) {
+                    System.out.println("전송 중 오류 발생: " + er.getMessage());
+                }
                 Mode = 1;
                 send();
             }
@@ -250,7 +261,6 @@ public class TalkPage_Sim {
         if (InputArea.getText().isEmpty()) {
             return;
         }
-
         String messageText = InputArea.getText();
 
         LocalTime currentTime = LocalTime.now(); // 현재 시간
@@ -308,7 +318,6 @@ public class TalkPage_Sim {
                     String inputMessage;
                     while ((inputMessage = in.readLine()) != null) {
                         MessageFromSim = inputMessage;
-                        System.out.println(MessageFromSim);
                         Mode = 2;
                         send();
                     }
@@ -353,7 +362,7 @@ public class TalkPage_Sim {
     static Action sendAction1= new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (InputArea.getText().isEmpty()) {
+            if (InputArea.getText().isEmpty() || (InputArea.getText().equals("메시지 입력") && InputArea.getForeground().equals(new Color(139,139,139)))) {
                 return;
             }
             String outputMessage = InputArea.getText();
